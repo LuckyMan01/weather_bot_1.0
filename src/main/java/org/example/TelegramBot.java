@@ -41,13 +41,25 @@ public class TelegramBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage();
             URL url = new URL(weatherService.buildHttpRequestWeather(update.getMessage().getText()));
             URLConnection connection = url.openConnection();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader bufferedReader = null;
+            String noFoundCity = "";
 
-            String weather = weatherService.getWeather(bufferedReader);
+            try {
+                bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            } catch (IOException e) {
+                noFoundCity = "null";
+            }
 
-            message.setChatId(update.getMessage().getChatId());
-            message.setText(weather);
             message.enableHtml(true);
+            message.setChatId(update.getMessage().getChatId());
+
+            if (noFoundCity.equals("null")) {
+                message.setText("Некоректне введення назви міста");
+                execute(message);
+            }
+            String weather = weatherService.getWeather(bufferedReader);
+            message.setText(weather);
+
             execute(message);
 
 
