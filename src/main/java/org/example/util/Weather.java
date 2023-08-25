@@ -10,7 +10,7 @@ public enum Weather {
 
     public final String label;
 
-    private Weather(String label) {
+    Weather(String label) {
         this.label = label;
     }
 }

@@ -36,29 +36,30 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
+        boolean isNoFoundCity = false;
         try {
             SendMessage message = new SendMessage();
             URL url = new URL(weatherService.buildHttpRequestWeather(update.getMessage().getText()));
             URLConnection connection = url.openConnection();
             BufferedReader bufferedReader = null;
-            String noFoundCity = "";
 
             try {
                 bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             } catch (IOException e) {
-                noFoundCity = "null";
+                isNoFoundCity = true;
             }
 
             message.enableHtml(true);
             message.setChatId(update.getMessage().getChatId());
 
-            if (noFoundCity.equals("null")) {
-                message.setText("Некоректне введення назви міста");
+            if (isNoFoundCity) {
+                message.setText("Некоректне введення назва міста");
                 execute(message);
             }
-            String weather = weatherService.getWeather(bufferedReader);
-            message.setText(weather);
+
+            String messageWeather = weatherService.getWeather(bufferedReader);
+            message.setText(messageWeather);
+
 
             execute(message);
 

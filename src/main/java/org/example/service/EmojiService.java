@@ -1,27 +1,29 @@
 package org.example.service;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.example.util.Emoji;
 import org.example.util.Weather;
 
-@Data
-@NoArgsConstructor(force = true)
+import java.util.HashMap;
+import java.util.Map;
+
 public class EmojiService {
+    private static final Map<String, String> emoji = new HashMap<>();
+
+    static {
+        emoji.put(Weather.CLOUDS.label, Emoji.CLOUDY.label);
+        emoji.put(Weather.CLEAR.label, Emoji.SUNNY.label);
+        emoji.put(Weather.RAIN.label, Emoji.THUNDERSTORM.label);
+        emoji.put(Weather.THUNDERSTORM.label, Emoji.THUNDERSTORM.label);
+        emoji.put(Weather.DRIZZLE.label, Emoji.CLOUDY.label);
+        emoji.put(Weather.SNOW.label, Emoji.SNOW.label);
+    }
 
     public static String getEmoji(String emojiValue) {
-        if (Weather.CLEAR.label.equals(emojiValue)) {
-            emojiValue = Emoji.SUNNY.label;
-        } else if (Weather.RAIN.label.equals(emojiValue) || Weather.THUNDERSTORM.label.equals(emojiValue)) {
-            emojiValue = Emoji.THUNDERSTORM.label;
-        } else if (Weather.CLOUDS.label.equals(emojiValue) || Weather.DRIZZLE.label.equals(emojiValue)) {
-            emojiValue = Emoji.CLOUDY.label;
-        } else if (Weather.SNOW.label.equals(emojiValue)) {
-            emojiValue = Emoji.SNOW.label;
+        if (emoji.containsKey(emojiValue)) {
+            return emoji.get(emojiValue);
         } else {
-            emojiValue = Emoji.FIRE.label;
+            return Emoji.FIRE.label;
         }
-        return emojiValue;
     }
 
 }

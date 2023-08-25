@@ -47,7 +47,7 @@ public class WeatherService {
         weather.setMinTemperature(obj.getJSONObject("main").getDouble("temp_min"));
         weather.setSunrise(getDate(obj.getJSONObject("sys").getLong("sunrise")));
         weather.setSunset(getDate(obj.getJSONObject("sys").getLong("sunset")));
-        weather.setDurationDay(getDate(obj.getJSONObject("sys").getLong("sunset") -obj.getJSONObject("sys").getLong("sunrise")));
+        weather.setDurationDay(getDate(obj.getJSONObject("sys").getLong("sunset") - obj.getJSONObject("sys").getLong("sunrise")));
 
         return createWeatherMessage();
     }
@@ -55,7 +55,7 @@ public class WeatherService {
     private String getDate(long longDate) {
         LocalDateTime time = LocalDateTime.ofInstant(Instant.ofEpochSecond(longDate),
                 TimeZone.getDefault().toZoneId());
-        return String.format("%d:%d:%d", time.getHour(), time.getMinute(), time.getSecond());
+        return time.toLocalTime().toString();
     }
 
     private String createWeatherMessage() {
